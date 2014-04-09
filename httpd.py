@@ -51,7 +51,8 @@ def main():
 
     settings = {
         'template_path': os.path.join(os.path.dirname(__file__), 'templates'),
-        'static_path': os.path.join(os.path.dirname(__file__), 'static')
+        'static_path': os.path.join(os.path.dirname(__file__), 'static'),
+        'debug': True
     }
     application = tornado.web.Application([
         ('/', MainHandler),
