@@ -1,20 +1,25 @@
+import json
 import logging
 import os.path
 import re
 import subprocess
+import sys
 
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
-import tornado.web
+import tornado.webq
 import tornado.websocket
 
 
 def get_wifi_ip():
-    p = subprocess.Popen('ipconfig', shell = True, stdout = subprocess.PIPE)
-    p.wait()
-    stdout = p.stdout.read()
-    return re.findall(r'IPv4.* (192\.168\.1.\d+)',stdout)[0]
+    if sys.platform == 'win32':
+        p = subprocess.Popen('ipconfig', shell = True, stdout = subprocess.PIPE)
+        p.wait()
+        stdout = p.stdout.read()
+        return re.findall(r'IPv4.* (192\.168\.1.\d+)',stdout)[0]
+    else:
+        return 'Unknown'
 
 WIFI_IP = get_wifi_ip()
 PORT = 15801
@@ -30,7 +35,11 @@ def send_message(message):
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render('index.html', port=PORT, wifi_ip=WIFI_IP)
+        ctx = {
+            'wifi_ip': WIFI_IP,
+            'port': PORT,
+        }
+        self.render('index.html', port=PORT, ctx=json.dumps(ctx))
 
 
 class ChatSocketHandler(tornado.websocket.WebSocketHandler):
