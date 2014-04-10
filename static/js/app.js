@@ -3,6 +3,7 @@
   var host = window.location.host;  
   var talkboard = CodeMirror.fromTextArea(document.getElementById("text"), {
       autofocus: true,
+      lineWrapping: true,
     }
   );
   var WebSocket = window.WebSocket || window.MozWebSocket;
