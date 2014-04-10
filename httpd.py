@@ -8,7 +8,7 @@ import sys
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
-import tornado.webq
+import tornado.web
 import tornado.websocket
 
 
